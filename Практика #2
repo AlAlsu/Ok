@@ -1,0 +1,103 @@
+
+
+// класс Транспорт
+public abstract class Transport
+{
+    public string RegistrationNumber { get; set; }
+    public DateTime MaintenanceDate { get; set; }
+
+    public Transport(string registrationNumber, DateTime maintenanceDate)
+    {
+        RegistrationNumber = registrationNumber;
+        MaintenanceDate = maintenanceDate;
+    }
+}
+
+// Класс Автомобиль
+public class Car : Transport
+{
+    public string TransmissionType { get; set; }
+
+    public Car(string registrationNumber, DateTime maintenanceDate, string transmissionType)
+        : base(registrationNumber, maintenanceDate)
+    {
+        TransmissionType = transmissionType;
+    }
+}
+
+// Класс Мотоцикл
+public class Motorcycle : Transport
+{
+    public string MotorcycleType { get; set; }
+
+    public Motorcycle(string registrationNumber, DateTime maintenanceDate, string motorcycleType)
+        : base(registrationNumber, maintenanceDate)
+    {
+        MotorcycleType = motorcycleType;
+    }
+}
+
+// Класс Станция ТО
+public class ServiceStation
+{
+    private List<Transport> transports;
+
+    public ServiceStation()
+    {
+        transports = new List<Transport>();
+    }
+
+    public void AddTransport(Transport transport)
+    {
+        transports.Add(transport);
+    }
+
+    public void GenerateSchedule()
+    {
+        transports.Sort((t1, t2) => t1.MaintenanceDate.CompareTo(t2.MaintenanceDate));
+    }
+
+    public void PrintSchedule()
+    {
+        foreach (var transport in transports)
+        {
+            Console.WriteLine($"Registration Number: {transport.RegistrationNumber}");
+            Console.WriteLine($"Maintenance Date: {transport.MaintenanceDate}");
+            if (transport is Car car)
+            {
+                Console.WriteLine($"Transmission Type: {car.TransmissionType}");
+            }
+            else if (transport is Motorcycle motorcycle)
+            {
+                Console.WriteLine($"Motorcycle Type: {motorcycle.MotorcycleType}");
+            }
+            Console.WriteLine();
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        ServiceStation serviceStation = new ServiceStation();
+
+        // Добавляем произвольные элементы
+        Car car1 = new Car("AB12345", new DateTime(2022, 1, 15), "Automatic");
+        Car car2 = new Car("CD67890", new DateTime(2022, 2, 10), "Manual");
+        Motorcycle motorcycle1 = new Motorcycle("EF54321", new DateTime(2022, 2, 5), "Sport");
+        Motorcycle motorcycle2 = new Motorcycle("GH09876", new DateTime(2022, 1, 20), "Cruiser");
+        Car car3 = new Car("IJ13579", new DateTime(2022, 3, 1), "Automatic");
+
+        serviceStation.AddTransport(car1);
+        serviceStation.AddTransport(car2);
+        serviceStation.AddTransport(motorcycle1);
+        serviceStation.AddTransport(motorcycle2);
+        serviceStation.AddTransport(car3);
+
+        serviceStation.GenerateSchedule();
+        serviceStation.PrintSchedule();
+
+        Console.ReadLine();
+    }
+}
