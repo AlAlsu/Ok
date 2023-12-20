@@ -1,15 +1,20 @@
-using System;
-
 // Базовый класс для растений
 abstract class Plant
 {
+    public Plant(string Variety){
+        if (string.IsNullOrEmpty(Variety)){
+            throw new ArgumentException(null, nameof(Variety));
+        } else {
+            this.Variety=Variety;
+        }
+    }
     public string Name { get; set; }
     public string Variety { get; set; }
 }
 // Класс Яблоня, наследуется от растения
 class AppleTree : Plant
 {
-    public AppleTree()
+    public AppleTree(string Variety) : base(Variety)
     {
         this.Name = "Яблоня";
     }
@@ -17,7 +22,7 @@ class AppleTree : Plant
 // Класс Смородина, наследуется от растения
 class Currant : Plant
 {
-    public Currant()
+    public Currant(string Variety) : base(Variety)
     {
         this.Name = "Смородина";
     }
@@ -49,7 +54,7 @@ class Program
         // Создаем экземпляр садовника
         var gardenerIvan = new Gardener { Name = "Иван" };
         // Создаем экземпляр яблони
-        var appleTree = new AppleTree { Variety = "Антоновка" };
+        var appleTree = new AppleTree("Антоновка");
 
         var PlantingPlantsWithApple = new PlantingPlants<Gardener, AppleTree>(gardenerIvan, appleTree);
         PlantingPlantsWithApple.ToPlant();
@@ -57,7 +62,7 @@ class Program
         // Создаем экземпляр садовника
         var gardenerVasiliy = new Gardener { Name = "Василий" };
         // Создаем экземпляр смородины
-        var currant = new Currant { Variety = "Черная" };
+        var currant = new Currant("Черная");
 
         var PlantingPlantsWithCurrant = new PlantingPlants<Gardener, Currant>(gardenerVasiliy, currant);
         PlantingPlantsWithCurrant.ToPlant();
